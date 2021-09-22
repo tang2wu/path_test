@@ -1,0 +1,22 @@
+<launch>
+    <!-- 模拟当前位姿——使用rostopic机制发布-->
+    <node pkg="path_test" type="pub_agent_feedback" name="pub_agent_feedback" output="screen" >
+    <!-- 2D起点位姿及id设置 -->
+        <param name="start_x" type="int" value="0"/>
+        <param name="start_y" type="int" value="3"/>
+        <param name="start_yaw" type="double" value="0.0"/>
+        <param name="id" value="agent_2"/>
+    </node>
+    
+    <!-- 路径规划核心算法——使用的A* -->
+    <node pkg="path_test" type="path_a" name="path_a" output="screen" ></node>
+    <!-- 模拟目标点位姿 ——rosservice客户端，并将路径使用rostopic发出，frame_id：map-->
+    <node pkg="path_test" type="target_client" name="target_client" output="screen" >
+        <param name="target_x" type="int" value="6"/>
+        <param name="target_y" type="int" value="3"/>
+        <param name="target_yaw" type="double" value="0.0"/>
+    </node>
+
+     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find path_test)/rviz/path.rviz"></node>
+    
+</launch>
